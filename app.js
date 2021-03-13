@@ -70,6 +70,45 @@ app.route("/articles/:articleTitle")
     })
 })
 
+.put(function(req, res){
+    Article.update(
+        {title: req.params.articleTitle},
+        {title: req.body.title, content: req.body.content},
+        {overwrite: true},
+        function(err, foundArticle){
+            if (!err) {
+                res.send("Successfully updated article");
+            }
+        })
+})
+
+.patch(function(req, res){
+    Article.update(
+        {title: req.params.articleTitle},
+        {$set: req.body},
+        function(err, foundArticle){
+            if (!err){
+                res.send("Successfully updated selected article");
+            } else {
+                res.send(err);
+            }
+        });
+})
+
+.delete(function(req, res){
+    Article.deleteOne(
+        {title: req.params.articleTitle},
+        function(err, foundArticle){
+            if (!err){
+                res.send("Successfully deleted selected article");
+            } else {
+                res.send(err);
+            }
+        });
+});
+
+
+
 app.listen(3000, function() {
   console.log("Server started on port 3000");
 });
